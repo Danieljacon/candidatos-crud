@@ -1,6 +1,6 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import { db } from "../firebase/firebase";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
 
 export const CandidatoContext = createContext();
 
@@ -11,9 +11,10 @@ export const CandidatoProvider = ({ children }) => {
   const [celular, setCelular] = useState("");
   const [email, setEmail] = useState("");
   const [data, setData] = useState("2021-01-01");
-
   const [sexo, setSexo] = useState("Masculino");
   const [habilidades, setHabilidades] = useState("");
+
+  const [dados, setDados] = useState([]);
 
   const checkHabilidade = (e) => {
     habilidades.includes(e.target.value)
@@ -132,7 +133,25 @@ export const CandidatoProvider = ({ children }) => {
       data: data,
       timestamp: serverTimestamp(),
     });
+    
   };
+
+  useEffect(() => {
+    const q = query(
+      collection(db, "candidato"),
+      orderBy("timestamp", "desc")
+    );
+    onSnapshot(q, (snapshot) => {
+      const dados = [];
+      snapshot.forEach((doc) => {
+        dados.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+      setDados(dados);
+    });
+  }, []);
 
 
 
@@ -157,7 +176,8 @@ export const CandidatoProvider = ({ children }) => {
         setHabilidades,
         infos,
         checkHabilidade,
-        handleSubmit
+        handleSubmit,
+        dados
       }}
     >
       {children}
