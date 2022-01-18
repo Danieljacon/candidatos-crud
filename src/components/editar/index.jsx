@@ -1,7 +1,11 @@
 import React, { useContext, useState, useEffect } from "react";
+import { CandidatoContext } from "../../contexts/CandidatoContext";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import ModalWindows from "../modal";
+import * as cpfTest from "@fnando/cpf"; // import the whole library
+import { isValid as isValidCpf } from "@fnando/cpf"; // import just one function
+import MaskInput from "react-maskinput";
 
 const Editar = ({ item }) => {
   const [cpf, setCpf] = useState(item.cpf);
@@ -11,17 +15,31 @@ const Editar = ({ item }) => {
   const [sexo, setSexo] = useState(item.sexo);
   const [data, setData] = useState(item.data);
   const [habilidades, setHabilidades] = useState(item.habilidades);
+  const { dados } = useContext(CandidatoContext);
 
   const handleEdit = () => {
-    updateDoc(doc(db, `candidato/${item.id}`), {
-      cpf: cpf,
-      nome: nome,
-      celular: celular,
-      email: email,
-      sexo: sexo,
-      data: data,
-      habilidades: habilidades,
-    });
+    if (
+      celular.replace(/\D/g, "").length < 11 ||
+      cpf.replace(/\D/g, "").length < 11
+    ) {
+      alert("Os campos CPF ou Celular devem possuir 11 caracteres");
+    } else if (cpfTest.isValid(cpf) === false) {
+      alert("CPF Inválido");
+    } else if (nome.split(" ").length <= 1) {
+      alert("Você deve digitar, além do nome, o sobrenome");
+    } else if (habilidades.length < 1) {
+      alert("Você deve selecionar pelo menos uma habilidade");
+    } else {
+      updateDoc(doc(db, `candidato/${item.id}`), {
+        cpf: cpf,
+        nome: nome,
+        celular: celular,
+        email: email,
+        sexo: sexo,
+        data: data,
+        habilidades: habilidades,
+      });
+    }
   };
 
   const sexoMasculino = sexo === "Masculino" ? true : false;
@@ -39,10 +57,14 @@ const Editar = ({ item }) => {
     {
       basicos: [
         {
+          input: "MaskInput",
           label: "CPF",
           type: "text",
           defaultValue: cpf,
           setValue: setCpf,
+          mask: "000.000.000-00",
+          size: 11,
+          maskChar: "_",
         },
         {
           label: "Nome",
@@ -51,10 +73,14 @@ const Editar = ({ item }) => {
           setValue: setNome,
         },
         {
+          input: "MaskInput",
           label: "Celular",
           type: "text",
           defaultValue: celular,
           setValue: setCelular,
+          mask: "(00) 00000 - 0000",
+          size: 11,
+          maskChar: "_",
         },
         {
           label: "Email",
@@ -148,18 +174,45 @@ const Editar = ({ item }) => {
     <ModalWindows label="editar">
       <div>
         {newInfos[0].basicos.map((info, index) => {
-          return (
-            <div key={index}>
-              <label>
+          if (info.input === "MaskInput") {
+            return (
+              <label key={index}>
                 {info.label}
-                <input
-                  type={info.type}
+                <MaskInput
+                  mask={info.mask}
+                  maskChar={info.maskChar}
+                  size={info.size}
                   defaultValue={info.defaultValue}
                   onChange={(e) => info.setValue(e.target.value)}
                 />
               </label>
-            </div>
-          );
+            );
+          } else {
+            return (
+              <div key={index}>
+                <label>
+                  {info.label}
+                  <input
+                    type={info.type}
+                    defaultValue={info.defaultValue}
+                    onChange={(e) => info.setValue(e.target.value)}
+                  />
+                </label>
+              </div>
+            );
+          }
+          // return (
+          //   <div key={index}>
+          //     <label>
+          //       {info.label}
+          //       <input
+          //         type={info.type}
+          //         defaultValue={info.defaultValue}
+          //         onChange={(e) => info.setValue(e.target.value)}
+          //       />
+          //     </label>
+          //   </div>
+          // );
         })}
       </div>
       <div>

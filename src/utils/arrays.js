@@ -8,3 +8,5 @@ export const tabelaCandidatos = [
     { field: "habilidades", headerName: "Habilidades" },
     { field: "acoes", headerName: "Ações" },
   ];
+
+  

@@ -69,7 +69,7 @@ export const CandidatoProvider = ({ children }) => {
         },
         {
           label: "Email",
-          type: "text",
+          type: "email",
           name: "email",
           value: email,
           setValue: setEmail,
@@ -141,6 +141,10 @@ export const CandidatoProvider = ({ children }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // checar se o CPF contem na base de dados
+
+    console.log(habilidades.length);
+
     if (
       celular.replace(/\D/g, "").length < 11 ||
       cpf.replace(/\D/g, "").length < 11
@@ -148,6 +152,12 @@ export const CandidatoProvider = ({ children }) => {
       alert("Os campos CPF ou Celular devem possuir 11 caracteres");
     } else if (cpfTest.isValid(cpf) === false) {
       alert("CPF Inválido");
+    } else if (nome.split(" ").length <= 1) {
+      alert("Você deve digitar, além do nome, o sobrenome");
+    } else if (dados.filter((dado) => dado.cpf === cpf).length > 0) {
+      alert("CPF já cadastrado");
+    } else if (habilidades.length < 1) {
+      alert("Você deve selecionar pelo menos uma habilidade");
     } else {
       addDoc(collection(db, "candidato"), {
         cpf: cpf,

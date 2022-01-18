@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import { CandidatoContext } from "../../contexts/CandidatoContext";
 import ModalWindows from "../modal";
 import MaskInput from "react-maskinput";
@@ -10,20 +10,6 @@ const Registrar = () => {
     <ModalWindows label="Registrar">
       <form onSubmit={handleSubmit}>
         <div>
-          {/* {infos[0].basicos.map((info, index) => {
-            return (
-              <div key={index}>
-                <label htmlFor={info.name}>{info.label}</label>
-                <input
-                required={true}
-                  type={info.type}
-                  name={info.name}
-                  value={info.value}
-                  onChange={(e) => info.setValue(e.target.value)}
-                />
-              </div>
-            );
-          })} */}
           {infos[0].basicos.map((info, index) => {
             if (info.input === "MaskInput") {
               return (
@@ -64,6 +50,7 @@ const Registrar = () => {
             return (
               <label htmlFor={info.name} key={index}>
                 <input
+                defaultChecked={info.value === "Masculino"}
                   type={info.type}
                   name={info.name}
                   value={info.value}
