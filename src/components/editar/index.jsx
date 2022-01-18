@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import ModalWindows from "../modal";
@@ -133,6 +133,16 @@ const Editar = ({ item }) => {
       ],
     },
   ];
+
+  useEffect(() => {
+    setCpf(item.cpf);
+    setNome(item.nome);
+    setCelular(item.celular);
+    setEmail(item.email);
+    setSexo(item.sexo);
+    setData(item.data);
+    setHabilidades(item.habilidades);
+  }, [item]);
 
   return (
     <ModalWindows label="editar">

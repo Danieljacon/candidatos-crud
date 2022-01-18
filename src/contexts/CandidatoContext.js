@@ -1,6 +1,15 @@
 import React, { createContext, useState, useEffect } from "react";
 import { db } from "../firebase/firebase";
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
+import * as cpfTest from "@fnando/cpf"; // import the whole library
+import { isValid as isValidCpf } from "@fnando/cpf"; // import just one function
 
 export const CandidatoContext = createContext();
 
@@ -15,6 +24,7 @@ export const CandidatoProvider = ({ children }) => {
   const [habilidades, setHabilidades] = useState("");
 
   const [dados, setDados] = useState([]);
+  const [dadosPreservados, setDadosPreservados] = useState([]);
 
   const checkHabilidade = (e) => {
     habilidades.includes(e.target.value)
@@ -28,13 +38,18 @@ export const CandidatoProvider = ({ children }) => {
     {
       basicos: [
         {
+          input: "MaskInput",
           label: "CPF",
           type: "text",
           name: "cpf",
           value: cpf,
           setValue: setCpf,
+          mask: "000.000.000-00",
+          size: 11,
+          maskChar: "_",
         },
         {
+          input: "input",
           label: "Nome",
           type: "text",
           name: "nome",
@@ -42,11 +57,15 @@ export const CandidatoProvider = ({ children }) => {
           setValue: setNome,
         },
         {
+          input: "MaskInput",
           label: "Celular",
           type: "text",
           name: "celular",
           value: celular,
           setValue: setCelular,
+          mask: "(00) 00000 - 0000",
+          size: 11,
+          maskChar: "_",
         },
         {
           label: "Email",
@@ -122,25 +141,29 @@ export const CandidatoProvider = ({ children }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    addDoc(collection(db, "candidato"), {
-      cpf: cpf,
-      nome: nome,
-      celular: celular,
-      email: email,
-      sexo: sexo,
-      habilidades: habilidades,
-      data: data,
-      timestamp: serverTimestamp(),
-    });
-    
+    if (
+      celular.replace(/\D/g, "").length < 11 ||
+      cpf.replace(/\D/g, "").length < 11
+    ) {
+      alert("Os campos CPF ou Celular devem possuir 11 caracteres");
+    } else if (cpfTest.isValid(cpf) === false) {
+      alert("CPF Inválido");
+    } else {
+      addDoc(collection(db, "candidato"), {
+        cpf: cpf,
+        nome: nome,
+        celular: celular,
+        email: email,
+        sexo: sexo,
+        habilidades: habilidades,
+        data: data,
+        timestamp: serverTimestamp(),
+      });
+    }
   };
 
   useEffect(() => {
-    const q = query(
-      collection(db, "candidato"),
-      orderBy("timestamp", "desc")
-    );
+    const q = query(collection(db, "candidato"), orderBy("timestamp", "desc"));
     onSnapshot(q, (snapshot) => {
       const dados = [];
       snapshot.forEach((doc) => {
@@ -149,11 +172,10 @@ export const CandidatoProvider = ({ children }) => {
           ...doc.data(),
         });
       });
+      setDadosPreservados(dados);
       setDados(dados);
     });
   }, []);
-
-
 
   return (
     <CandidatoContext.Provider
@@ -177,7 +199,10 @@ export const CandidatoProvider = ({ children }) => {
         infos,
         checkHabilidade,
         handleSubmit,
-        dados
+        dados,
+        setDados,
+        dadosPreservados,
+        setDadosPreservados,
       }}
     >
       {children}
