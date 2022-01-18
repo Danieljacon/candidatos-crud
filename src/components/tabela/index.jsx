@@ -30,7 +30,7 @@ const Tabela = () => {
               <td>{item.data}</td>
               <td>{item.habilidades}</td>
               <td>
-                <Editar id={item.id}>Editar</Editar>
+                <Editar item={item}>Editar</Editar>
                 <Excluir id={item.id}/>
               </td>
             </tr>
