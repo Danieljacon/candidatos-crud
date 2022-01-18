@@ -6,8 +6,7 @@ import Editar from "../editar/index.jsx";
 
 const Tabela = () => {
   const columns = [...tabelaCandidatos];
-  const { dados, setId } = useContext(CandidatoContext);
-  console.log(dados);
+  const { dados } = useContext(CandidatoContext);
 
   return (
     <table>

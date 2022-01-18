@@ -21,7 +21,6 @@ const Editar = ({ item }) => {
       sexo: sexo,
       data: data,
       habilidades: habilidades,
-      // CORRIGIR HABILIDADES
     });
   };
 
@@ -43,31 +42,31 @@ const Editar = ({ item }) => {
           label: "CPF",
           type: "text",
           defaultValue: cpf,
-          seValue: setCpf,
+          setValue: setCpf,
         },
         {
           label: "Nome",
           type: "text",
           defaultValue: nome,
-          seValue: setNome,
+          setValue: setNome,
         },
         {
           label: "Celular",
           type: "text",
           defaultValue: celular,
-          seValue: setCelular,
+          setValue: setCelular,
         },
         {
           label: "Email",
           type: "email",
           defaultValue: email,
-          seValue: setEmail,
+          setValue: setEmail,
         },
         {
           label: "Data de Nascimento",
           type: "date",
           defaultValue: data,
-          seValue: setData,
+          setValue: setData,
         },
       ],
       sexo: [
@@ -93,8 +92,42 @@ const Editar = ({ item }) => {
           label: "HTML",
           type: "checkbox",
           name: "habilidades",
-          value: "HTML",
-          defaultChecked: item.habilidades.includes("HTML") ? true : false,
+          value: `HTML`,
+          defaultChecked: item.habilidades.includes(`HTML`) ? true : false,
+          setValue: checkHabilidade,
+        },
+        {
+          label: "CSS",
+          type: "checkbox",
+          name: "habilidades",
+          value: "CSS",
+          defaultChecked: item.habilidades.includes("CSS") ? true : false,
+          setValue: checkHabilidade,
+        },
+        {
+          label: "JavaScript",
+          type: "checkbox",
+          name: "habilidades",
+          value: "JavaScript",
+          defaultChecked: item.habilidades.includes("JavaScript")
+            ? true
+            : false,
+          setValue: checkHabilidade,
+        },
+        {
+          label: "React",
+          type: "checkbox",
+          name: "habilidades",
+          value: "React",
+          defaultChecked: item.habilidades.includes("React") ? true : false,
+          setValue: checkHabilidade,
+        },
+        {
+          label: "Node.js | ",
+          type: "checkbox",
+          name: "habilidades",
+          value: "Node.js",
+          defaultChecked: item.habilidades.includes("Node.js") ? true : false,
           setValue: checkHabilidade,
         },
       ],
@@ -104,68 +137,56 @@ const Editar = ({ item }) => {
   return (
     <ModalWindows label="editar">
       <div>
-        <input
-          type="text"
-          defaultValue={cpf}
-          onChange={(e) => {
-            setCpf(e.target.value);
-          }}
-        />
-        <input
-          type="text"
-          defaultValue={nome}
-          onChange={(e) => {
-            setNome(e.target.value);
-          }}
-        />
-        <input
-          type="text"
-          defaultValue={celular}
-          onChange={(e) => {
-            setCelular(e.target.value);
-          }}
-        />
-        <input
-          type="text"
-          defaultValue={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        />
+        {newInfos[0].basicos.map((info, index) => {
+          return (
+            <div key={index}>
+              <label>
+                {info.label}
+                <input
+                  type={info.type}
+                  defaultValue={info.defaultValue}
+                  onChange={(e) => info.setValue(e.target.value)}
+                />
+              </label>
+            </div>
+          );
+        })}
       </div>
       <div>
-        <input
-          type="radio"
-          name="sexo"
-          value="Masculino"
-          defaultChecked={sexoMasculino}
-          onChange={(e) => {
-            setSexo(e.target.value);
-          }}
-        />
-        Masculino
-        <input
-          type="radio"
-          name="sexo"
-          value="Feminino"
-          defaultChecked={sexoFeminino}
-          onChange={(e) => {
-            setSexo(e.target.value);
-          }}
-        />
-        Feminino
+        {newInfos[0].sexo.map((info, index) => {
+          return (
+            <label key={index}>
+              <input
+                type={info.type}
+                name={info.name}
+                value={info.value}
+                defaultChecked={info.defaultValue}
+                onChange={(e) => info.setValue(e.target.value)}
+              />
+              {info.label}
+            </label>
+          );
+        })}
       </div>
+
       <div>
-        <input
-          type="date"
-          defaultValue={data}
-          onChange={(e) => {
-            setData(e.target.value);
-          }}
-        />
-      </div>
-      <div>
-        <label>
+        {newInfos[0].habilidades.map((info, index) => {
+          return (
+            <div key={index}>
+              <label>
+                <input
+                  type={info.type}
+                  name={info.name}
+                  value={info.value}
+                  defaultChecked={info.defaultChecked}
+                  onChange={info.setValue}
+                />
+                {info.label}
+              </label>
+            </div>
+          );
+        })}
+        {/* <label>
           <input
             type="checkbox"
             name="habilidades"
@@ -216,7 +237,7 @@ const Editar = ({ item }) => {
             onChange={checkHabilidade}
           />
           Node.js
-        </label>
+        </label> */}
       </div>
 
       <button onClick={handleEdit}>Editar</button>
@@ -225,3 +246,72 @@ const Editar = ({ item }) => {
 };
 
 export default Editar;
+
+//
+{
+  /* <input
+          type="text"
+          defaultValue={cpf}
+          onChange={(e) => {
+            setCpf(e.target.value);
+          }}
+        />
+        <input
+          type="text"
+          defaultValue={nome}
+          onChange={(e) => {
+            setNome(e.target.value);
+          }}
+        />
+        <input
+          type="text"
+          defaultValue={celular}
+          onChange={(e) => {
+            setCelular(e.target.value);
+          }}
+        />
+        <input
+          type="text"
+          defaultValue={email}
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
+        /> */
+}
+
+{
+  /* <input
+          type="radio"
+          name="sexo"
+          value="Masculino"
+          defaultChecked={sexoMasculino}
+          onChange={(e) => {
+            setSexo(e.target.value);
+          }}
+        />
+        Masculino
+        <input
+          type="radio"
+          name="sexo"
+          value="Feminino"
+          defaultChecked={sexoFeminino}
+          onChange={(e) => {
+            setSexo(e.target.value);
+          }}
+        />
+        Feminino */
+}
+
+{
+  /* <div>
+        <input
+          type="date"
+          defaultValue={data}
+          onChange={(e) => {
+            setData(e.target.value);
+          }}
+        />
+      </div> */
+}
+
+//
