@@ -8,7 +8,7 @@ function App() {
   return (
     <ChakraProvider>
       <Container maxW="sm" centerContent p={10}>
-        <Stack direction={["row"]} spacing="7px">
+        <Stack direction={["row"]} spacing="7px" mb={10}>
           <Pesquisar />
           <Registrar />
         </Stack>

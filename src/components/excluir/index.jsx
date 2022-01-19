@@ -3,6 +3,7 @@ import { db } from "../../firebase/firebase";
 import { deleteDoc, doc } from "firebase/firestore";
 import { Button } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
+import ModalWindows from "../modal";
 
 const Excluir = ({ id }) => {
   const handleDelete = () => {
@@ -10,16 +11,19 @@ const Excluir = ({ id }) => {
   };
   return (
     <>
-      <Button
-        width="100px"
-        height="30px"
-        rightIcon={<DeleteIcon />}
-        colorScheme="teal"
-        variant="solid"
-        onClick={handleDelete}
-      >
-        Deletar
-      </Button>
+      <ModalWindows label="Deletar" icon={<DeleteIcon />}>
+        Deseja mesmo deletar?
+        <Button
+          width="100px"
+          height="30px"
+          rightIcon={<DeleteIcon />}
+          colorScheme="red"
+          variant="solid"
+          onClick={handleDelete}
+        >
+          Deletar
+        </Button>
+      </ModalWindows>
     </>
   );
 };
