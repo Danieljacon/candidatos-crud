@@ -5,7 +5,7 @@ import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 import { MaskInputStyled, ContainerBox } from "./styles";
 
 const Registrar = () => {
-  const { infos, checkHabilidade, handleSubmit } = useContext(CandidatoContext);
+  const { infos, checkHabilidade, handleSubmit, erroMsg } = useContext(CandidatoContext);
 
   return (
     <ModalWindows label="Registrar" variant="outline">
@@ -36,6 +36,7 @@ const Registrar = () => {
                     value={info.value}
                     onChange={(e) => info.setValue(e.target.value)}
                   />
+                  {erroMsg}
                 </FormControl>
               );
             } else {

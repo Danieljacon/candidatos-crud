@@ -150,7 +150,7 @@ const Editar = ({ item }) => {
           setValue: checkHabilidade,
         },
         {
-          label: "Node.js | ",
+          label: "Node.js",
           type: "checkbox",
           name: "habilidades",
           value: "Node.js",

@@ -47,8 +47,9 @@ const Tabela = () => {
                 color: "red.500",
                 cursor: "pointer",
               }}
+              
             >
-              <Td>{item.cpf}</Td>
+              <Td >{item.cpf}</Td>
               <Td>{item.nome}</Td>
               <Td>{item.celular}</Td>
               <Td>{item.email}</Td>

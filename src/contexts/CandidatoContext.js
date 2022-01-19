@@ -10,8 +10,10 @@ import {
 } from "firebase/firestore";
 import * as cpfTest from "@fnando/cpf"; // import the whole library
 import { isValid as isValidCpf } from "@fnando/cpf"; // import just one function
-
-
+import {
+  Box,
+  useToast,
+} from "@chakra-ui/react";
 
 export const CandidatoContext = createContext();
 
@@ -24,6 +26,8 @@ export const CandidatoProvider = ({ children }) => {
   const [data, setData] = useState("2021-01-01");
   const [sexo, setSexo] = useState("Masculino");
   const [habilidades, setHabilidades] = useState("");
+  const [erroMsg, setErroMsg] = useState(false);
+  const toast = useToast();
 
   const [dados, setDados] = useState([]);
   const [dadosPreservados, setDadosPreservados] = useState([]);
@@ -148,15 +152,73 @@ export const CandidatoProvider = ({ children }) => {
       celular.replace(/\D/g, "").length < 11 ||
       cpf.replace(/\D/g, "").length < 11
     ) {
-      alert("Os campos CPF ou Celular devem possuir 11 caracteres");
+      <div>
+        {toast({
+          position: "top",
+          duration: 5000,
+          render: () => (
+            <Box color="white" px={6} py={3} bg="red" borderRadius="15px">
+              Os campos CPF ou Celular devem possuir 11 caracteres
+            </Box>
+          ),
+        })}
+      </div>;
     } else if (cpfTest.isValid(cpf) === false) {
-      alert("CPF Inválido");
+      {
+        <div>
+          {toast({
+            position: "top",
+            duration: 5000,
+            render: () => (
+              <Box color="white" px={6} py={3} bg="red" borderRadius="15px">
+                CPF inválido
+              </Box>
+            ),
+          })}
+        </div>;
+      }
     } else if (nome.split(" ").length <= 1) {
-      alert("Você deve digitar, além do nome, o sobrenome");
+      {
+        <div>
+          {toast({
+            position: "top",
+            duration: 5000,
+            render: () => (
+              <Box color="white" px={6} py={3} bg="red" borderRadius="15px">
+                Você deve digitar, além do nome, o sobrenome.
+              </Box>
+            ),
+          })}
+        </div>;
+      }
     } else if (dados.filter((dado) => dado.cpf === cpf).length > 0) {
-      alert("CPF já cadastrado");
+      {
+        <div>
+          {toast({
+            position: "top",
+            duration: 5000,
+            render: () => (
+              <Box color="white" px={6} py={3} bg="red" borderRadius="15px">
+                CPF já cadastrado.
+              </Box>
+            ),
+          })}
+        </div>;
+      }
     } else if (habilidades.length < 1) {
-      alert("Você deve selecionar pelo menos uma habilidade");
+      {
+        <div>
+          {toast({
+            position: "top",
+            duration: 5000,
+            render: () => (
+              <Box color="white" px={6} py={3} bg="red" borderRadius="15px">
+                Você deve selecionar pelo menos uma habilidade.
+              </Box>
+            ),
+          })}
+        </div>;
+      }
     } else {
       addDoc(collection(db, "candidato"), {
         cpf: cpf,
@@ -212,6 +274,7 @@ export const CandidatoProvider = ({ children }) => {
         setDados,
         dadosPreservados,
         setDadosPreservados,
+        erroMsg,
       }}
     >
       {children}
