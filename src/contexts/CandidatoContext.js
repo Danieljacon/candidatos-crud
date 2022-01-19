@@ -11,6 +11,8 @@ import {
 import * as cpfTest from "@fnando/cpf"; // import the whole library
 import { isValid as isValidCpf } from "@fnando/cpf"; // import just one function
 
+
+
 export const CandidatoContext = createContext();
 
 export const CandidatoProvider = ({ children }) => {
@@ -38,6 +40,14 @@ export const CandidatoProvider = ({ children }) => {
     {
       basicos: [
         {
+          input: "input",
+          label: "Nome",
+          type: "text",
+          name: "nome",
+          value: nome,
+          setValue: setNome,
+        },
+        {
           input: "MaskInput",
           label: "CPF",
           type: "text",
@@ -47,14 +57,6 @@ export const CandidatoProvider = ({ children }) => {
           mask: "000.000.000-00",
           size: 11,
           maskChar: "_",
-        },
-        {
-          input: "input",
-          label: "Nome",
-          type: "text",
-          name: "nome",
-          value: nome,
-          setValue: setNome,
         },
         {
           input: "MaskInput",
@@ -141,9 +143,6 @@ export const CandidatoProvider = ({ children }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // checar se o CPF contem na base de dados
-
-    console.log(habilidades.length);
 
     if (
       celular.replace(/\D/g, "").length < 11 ||

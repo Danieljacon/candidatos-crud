@@ -1,15 +1,20 @@
 import Pesquisar from "./components/pesquisar";
 import Registrar from "./components/registrar";
 import Tabela from "./components/tabela";
-import Teste from "./components/teste";
+import { Center, Container, Divider, Stack, VStack } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 
 function App() {
   return (
-    <div>
-      <Pesquisar />
-      <Registrar />
-      <Tabela />
-    </div>
+    <ChakraProvider>
+      <Container maxW="sm" centerContent p={10}>
+        <Stack direction={["row"]} spacing="7px">
+          <Pesquisar />
+          <Registrar />
+        </Stack>
+        <Tabela />
+      </Container>
+    </ChakraProvider>
   );
 }
 

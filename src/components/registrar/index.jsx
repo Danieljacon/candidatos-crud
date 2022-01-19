@@ -1,56 +1,83 @@
 import React, { useContext } from "react";
 import { CandidatoContext } from "../../contexts/CandidatoContext";
 import ModalWindows from "../modal";
-import MaskInput from "react-maskinput";
+import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { MaskInputStyled, ContainerBox } from "./styles";
 
 const Registrar = () => {
   const { infos, checkHabilidade, handleSubmit } = useContext(CandidatoContext);
 
   return (
-    <ModalWindows label="Registrar">
+    <ModalWindows label="Registrar" variant="outline">
       <form onSubmit={handleSubmit}>
-        <div>
+        <ContainerBox>
           {infos[0].basicos.map((info, index) => {
             if (info.input === "MaskInput") {
               return (
-                <div key={index}>
-                  <label htmlFor={info.name}>{info.label}</label>
-                  <MaskInput
+                <FormControl
+                  key={index}
+                  border="1px"
+                  borderColor="gray"
+                  p={2}
+                  marginY={2}
+                  borderRadius={10}
+                >
+                  <FormLabel htmlFor={info.name}>{info.label}</FormLabel>
+                  <MaskInputStyled
                     alwaysShowMask
                     mask={info.mask}
                     size={info.size}
                     minLength="6"
                     showMask
                     maskChar="_"
+                    id={info.name}
                     type={info.type}
                     name={info.name}
                     value={info.value}
                     onChange={(e) => info.setValue(e.target.value)}
                   />
-                </div>
+                </FormControl>
               );
             } else {
               return (
-                <div key={index}>
-                  <label htmlFor={info.name}>{info.label}</label>
-                  <input
+                <FormControl
+                  key={index}
+                  border="1px"
+                  borderColor="gray"
+                  p={2}
+                  marginY={2}
+                  borderRadius={10}
+                >
+                  <FormLabel htmlFor={info.name}>{info.label}</FormLabel>
+                  <Input
                     required={true}
                     type={info.type}
+                    id={info.name}
                     name={info.name}
                     value={info.value}
                     onChange={(e) => info.setValue(e.target.value)}
                   />
-                </div>
+                </FormControl>
               );
             }
           })}
-        </div>
-        <div>
+        </ContainerBox>
+        <FormControl
+          border="1px"
+          borderColor="gray"
+          p={2}
+          marginY={2}
+          borderRadius={10}
+          display={"flex"}
+          justifyContent="center"
+          alignContent={"center"}
+          gap={3}
+        >
           {infos[0].sexo.map((info, index) => {
             return (
               <label htmlFor={info.name} key={index}>
                 <input
-                defaultChecked={info.value === "Masculino"}
+                  defaultChecked={info.value === "Masculino"}
                   type={info.type}
                   name={info.name}
                   value={info.value}
@@ -60,9 +87,18 @@ const Registrar = () => {
               </label>
             );
           })}
-        </div>
-
-        <div>
+        </FormControl>
+        <FormControl
+          border="1px"
+          borderColor="gray"
+          p={2}
+          marginY={2}
+          borderRadius={10}
+          display={"flex"}
+          justifyContent="center"
+          alignContent={"center"}
+          gap={3}
+        >
           {infos[0].habilidade.map((item, index) => {
             return (
               <label key={index}>
@@ -79,9 +115,11 @@ const Registrar = () => {
               </label>
             );
           })}
-        </div>
+        </FormControl>
 
-        <button type="submit">Enviar</button>
+        <Button type="submit" size={"md"} colorScheme="teal" variant="solid">
+          Enviar
+        </Button>
       </form>
     </ModalWindows>
   );

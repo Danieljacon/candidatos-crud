@@ -1,28 +1,31 @@
 import React, { useState } from "react";
 import { Layer } from "grommet";
 import { CloseButton, ModalContainer } from "./styles";
+import { Button } from "@chakra-ui/react";
 
-const ModalWindows = ({ children, label }) => {
-
+const ModalWindows = ({ children, label, icon }) => {
   const [show, setShow] = useState();
-
 
   return (
     <div>
-      <button onClick={() => setShow(true)}>
+      <Button
+        size={"md"}
+        rightIcon={icon}
+        colorScheme="teal"
+        variant="solid"
+        onClick={() => setShow(true)}
+      >
         {label}
-      </button>
+      </Button>
       {show && (
         <Layer
           onEsc={() => setShow(false)}
           onClickOutside={() => setShow(false)}
           responsive={false}
-          style={{ borderRadius: '20px' }}
+          style={{ borderRadius: "20px" }}
         >
           <CloseButton onClick={() => setShow(false)}>x</CloseButton>
-          <ModalContainer>
-            {children}
-          </ModalContainer>
+          <ModalContainer>{children}</ModalContainer>
         </Layer>
       )}
     </div>

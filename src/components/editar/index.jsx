@@ -4,8 +4,10 @@ import { updateDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase/firebase";
 import ModalWindows from "../modal";
 import * as cpfTest from "@fnando/cpf"; // import the whole library
-import { isValid as isValidCpf } from "@fnando/cpf"; // import just one function
 import MaskInput from "react-maskinput";
+import { EditIcon } from "@chakra-ui/icons";
+import { MaskInputStyled, ContainerBox } from "./styles";
+import { Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 
 const Editar = ({ item }) => {
   const [cpf, setCpf] = useState(item.cpf);
@@ -15,7 +17,6 @@ const Editar = ({ item }) => {
   const [sexo, setSexo] = useState(item.sexo);
   const [data, setData] = useState(item.data);
   const [habilidades, setHabilidades] = useState(item.habilidades);
-  const { dados } = useContext(CandidatoContext);
 
   const handleEdit = () => {
     if (
@@ -171,51 +172,67 @@ const Editar = ({ item }) => {
   }, [item]);
 
   return (
-    <ModalWindows label="editar">
-      <div>
+    <ModalWindows label="Editar" icon={<EditIcon />}>
+      <ContainerBox>
         {newInfos[0].basicos.map((info, index) => {
           if (info.input === "MaskInput") {
             return (
-              <label key={index}>
-                {info.label}
-                <MaskInput
-                  mask={info.mask}
-                  maskChar={info.maskChar}
-                  size={info.size}
-                  defaultValue={info.defaultValue}
-                  onChange={(e) => info.setValue(e.target.value)}
-                />
-              </label>
-            );
-          } else {
-            return (
-              <div key={index}>
-                <label>
+              <FormControl
+                key={index}
+                border="1px"
+                borderColor="gray"
+                p={2}
+                marginY={2}
+                borderRadius={10}
+              >
+                <FormLabel key={index}>
                   {info.label}
-                  <input
-                    type={info.type}
+                  <MaskInputStyled
+                    mask={info.mask}
+                    maskChar={info.maskChar}
+                    size={info.size}
                     defaultValue={info.defaultValue}
                     onChange={(e) => info.setValue(e.target.value)}
                   />
-                </label>
-              </div>
+                </FormLabel>
+              </FormControl>
+            );
+          } else {
+            return (
+              <FormControl
+                key={index}
+                border="1px"
+                borderColor="gray"
+                p={2}
+                marginY={2}
+                borderRadius={10}
+              >
+                <div key={index}>
+                  <FormLabel>
+                    {info.label}
+                    <Input
+                      type={info.type}
+                      defaultValue={info.defaultValue}
+                      onChange={(e) => info.setValue(e.target.value)}
+                    />
+                  </FormLabel>
+                </div>
+              </FormControl>
             );
           }
-          // return (
-          //   <div key={index}>
-          //     <label>
-          //       {info.label}
-          //       <input
-          //         type={info.type}
-          //         defaultValue={info.defaultValue}
-          //         onChange={(e) => info.setValue(e.target.value)}
-          //       />
-          //     </label>
-          //   </div>
-          // );
         })}
-      </div>
-      <div>
+      </ContainerBox>
+      <FormControl
+        border="1px"
+        borderColor="gray"
+        p={2}
+        marginY={2}
+        borderRadius={10}
+        display={"flex"}
+        justifyContent="center"
+        alignContent={"center"}
+        gap={3}
+      >
         {newInfos[0].sexo.map((info, index) => {
           return (
             <label key={index}>
@@ -230,9 +247,19 @@ const Editar = ({ item }) => {
             </label>
           );
         })}
-      </div>
+      </FormControl>
 
-      <div>
+      <FormControl
+        border="1px"
+        borderColor="gray"
+        p={2}
+        marginY={2}
+        borderRadius={10}
+        display={"flex"}
+        justifyContent="center"
+        alignContent={"center"}
+        gap={3}
+      >
         {newInfos[0].habilidades.map((info, index) => {
           return (
             <div key={index}>
@@ -249,132 +276,18 @@ const Editar = ({ item }) => {
             </div>
           );
         })}
-        {/* <label>
-          <input
-            type="checkbox"
-            name="habilidades"
-            value="HTML"
-            defaultChecked={item.habilidades.includes("HTML") ? true : false}
-            onChange={checkHabilidade}
-          />
-          HTML
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="habilidades"
-            value="CSS"
-            defaultChecked={item.habilidades.includes("CSS") ? true : false}
-            onChange={checkHabilidade}
-          />
-          CSS
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="habilidades"
-            value="JavaScript"
-            defaultChecked={
-              item.habilidades.includes("JavaScript") ? true : false
-            }
-            onChange={checkHabilidade}
-          />
-          JavaScript
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="habilidades"
-            value="React"
-            defaultChecked={item.habilidades.includes("React") ? true : false}
-            onChange={checkHabilidade}
-          />
-          React
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            name="habilidades"
-            value="Node.js"
-            defaultChecked={item.habilidades.includes("Node.js") ? true : false}
-            onChange={checkHabilidade}
-          />
-          Node.js
-        </label> */}
-      </div>
+      </FormControl>
 
-      <button onClick={handleEdit}>Editar</button>
+      <Button
+        size={"md"}
+        colorScheme="teal"
+        variant="solid"
+        onClick={handleEdit}
+      >
+        Editar
+      </Button>
     </ModalWindows>
   );
 };
 
 export default Editar;
-
-//
-{
-  /* <input
-          type="text"
-          defaultValue={cpf}
-          onChange={(e) => {
-            setCpf(e.target.value);
-          }}
-        />
-        <input
-          type="text"
-          defaultValue={nome}
-          onChange={(e) => {
-            setNome(e.target.value);
-          }}
-        />
-        <input
-          type="text"
-          defaultValue={celular}
-          onChange={(e) => {
-            setCelular(e.target.value);
-          }}
-        />
-        <input
-          type="text"
-          defaultValue={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-          }}
-        /> */
-}
-
-{
-  /* <input
-          type="radio"
-          name="sexo"
-          value="Masculino"
-          defaultChecked={sexoMasculino}
-          onChange={(e) => {
-            setSexo(e.target.value);
-          }}
-        />
-        Masculino
-        <input
-          type="radio"
-          name="sexo"
-          value="Feminino"
-          defaultChecked={sexoFeminino}
-          onChange={(e) => {
-            setSexo(e.target.value);
-          }}
-        />
-        Feminino */
-}
-
-{
-  /* <div>
-        <input
-          type="date"
-          defaultValue={data}
-          onChange={(e) => {
-            setData(e.target.value);
-          }}
-        />
-      </div> */
-}
-
-//
